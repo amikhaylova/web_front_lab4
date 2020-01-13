@@ -1,37 +1,35 @@
 import React from "react";
-import AuthReduxForm from "./GeneralComponents/AuthForm";
-import PropTypes from "prop-types";
-
+import AuthReduxForm from "./AuthForm";
+import {login} from "../Actions/UserAсtions";
+import {connect} from "react-redux";
 
 
 class Auth extends React.Component {
 
 
-    onSubmit = (formData)=>{
-        const url = "http://127.0.0.1:8080/greeting";
-        this.props.userFetchData(url, formData);
+    onSubmit = (formData) => {
+        this.props.login(formData);
     };
 
     render() {
-        const { name } = this.props;
         return (
-            <div>
+            <div className='content form_container'>
                 <h2>АВТОРИЗАЦИЯ</h2>
-                <AuthReduxForm onSubmit={this.onSubmit}/>
+                <AuthReduxForm onSubmit={this.onSubmit.bind(this)}/>
             </div>
 
         );
     }
 }
 
-Auth.propTypes = {
-    login: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired,
-    auth: PropTypes.bool.isRequired,
-    is_authing: PropTypes.bool.isRequired,
-    redirect: PropTypes.bool.isRequired,
-    userFetchData: PropTypes.func.isRequired,
+function mapStateToProps (state) {
+    return {
+    }
+}
+function mapDispatchToProps(dispatch) {
+    return {
+        login: (data) => dispatch(login(data)),
+    }
+}
 
-};
-
-export default Auth;
+export default connect(mapStateToProps, mapDispatchToProps)(Auth)

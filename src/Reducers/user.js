@@ -1,34 +1,47 @@
-import browserHistory from 'react-router'
+import { NotificationManager } from 'react-notifications';
 
 export const initialState = {
-    login: 'anonymous',
-    password: '',
+    jwt: 'a',
     auth:false,
-    is_authing:false,
-    redirect: false,
+    points:[],
+    current_r:'',
 };
 
 export function userReducer(state=initialState, action) {
     switch (action.type) {
-        case 'DATA_IS_FETCHING':{
-            return {...state, is_authing: true};
-        }
-        case 'FETCH_DATA':{
-            console.log(action.payload.auth);
-            if (action.payload.auth == 'true'){
-                return {...state, auth: Boolean(action.payload.auth), redirect:true, is_authing:false};
+        /*case 'ADD_POINT':
+            let new_points = state.points.push(action.payload);
+            return {...state, };*/
+        case 'CHANGE_POINTS':
+            return {...state, points:action.payload};
+        case '@@redux-form/BLUR':
+            if (action.meta.field == 'r'){
+                return {...state, current_r:action.payload}
             }
-            return {...state, auth: Boolean(action.payload.auth),is_authing:false};
-        }
-        case 'FETCH_DATA_ERROR':{
-            console.log("ОШИИИИИБКА");
-            console.log(action.payload);
-            return {...state, is_authing:false};
-        }
+            return {...state};
+        case 'LOGIN_REQUEST':
+            return {...state};
 
-        case 'LOG_OUT':{
-            return {...state, redirect: false, auth: false};
-        }
+        case 'LOGIN_SUCCESS':
+            return {...state, auth:true, jwt: action.payload.jwt};
+
+        case 'LOGIN_FAIL':
+            //alert('Не удалось авторизоваться');
+            NotificationManager.success('You have added a new book!', 'Successful!', 2000);
+            return {...state, auth:false,};
+
+        case 'LOGOUT_SUCCESS':
+            return {...state, auth:false, jwt:' ', points:[], current_r:''};
+
+        case 'REG_REQUEST':
+            return {...state};
+
+        case 'REG_SUCCESS':
+            return {...state};
+
+        case 'REG_FAIL':
+            return {...state};
+
         default:
             return state;
     }

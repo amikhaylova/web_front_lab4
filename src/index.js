@@ -1,6 +1,6 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React from "react";
-import ReactDOM from "react-dom";
-import Main from "./Components/Main";
+import { render } from 'react-dom'
 import "./css/index.css";
 import { createStore, applyMiddleware } from 'redux';
 import thunk from "redux-thunk";
@@ -8,6 +8,9 @@ import rootReducer from "./Reducers/rootReducer";
 import {Provider} from "react-redux";
 import {composeWithDevTools} from "redux-devtools-extension";
 import logger from "redux-logger";
+import {Router, browserHistory} from 'react-router';
+import {routes} from "./Utils/routes";
+import {redirect} from "./Middlewares/redirect";
 
 const saveState = (state) => {
     try {
@@ -52,7 +55,7 @@ const oldState = loadState();
 const store = createStore(
     rootReducer,
     oldState,
-    composeWithDevTools(applyMiddleware(thunk, logger)),
+    composeWithDevTools(applyMiddleware(thunk, logger, redirect)),
 
 );
 /**
@@ -67,11 +70,9 @@ store.subscribe(() => {
 
 window.store = store;
 
-
-
-ReactDOM.render(
+render(
     (<Provider store={store}>
-        <Main/>
+        <Router history={browserHistory} routes={routes} />
     </Provider>),
     document.getElementById('root')
 );

@@ -1,6 +1,5 @@
 .formControl.error input {
     border: red solid 2px;
-
 }
 .formControl.error span{
     color: red;
